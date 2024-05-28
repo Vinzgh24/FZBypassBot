@@ -21,21 +21,21 @@ basicConfig(
 )
 load_dotenv("config.env", override=True)
        
-BOT_TOKEN = os.environ.get("BOT_TOKEN", "")
+BOT_TOKEN = getenv("BOT_TOKEN", "")
 if len(BOT_TOKEN) == 0:
     LOGGER.error("BOT_TOKEN is not found!")
     exit(1)
 
 bot_id = BOT_TOKEN.split(":", 1)[0]
 
-UPSTREAM_REPO = os.environ.get("UPSTREAM_REPO", None)
+UPSTREAM_REPO = getenv("UPSTREAM_REPO", None)
 if (
     UPSTREAM_REPO is not None
     and UPSTREAM_REPO.startswith("#")
 ):
     UPSTREAM_REPO = None
 
-UPSTREAM_BRANCH = os.environ.get("UPSTREAM_BRANCH", None)
+UPSTREAM_BRANCH = getenv("UPSTREAM_BRANCH", None)
 if UPSTREAM_BRANCH is None:
     UPSTREAM_BRANCH = "master"
     
