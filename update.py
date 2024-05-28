@@ -40,14 +40,14 @@ if UPSTREAM_BRANCH is None:
     UPSTREAM_BRANCH = "master"
     
 if UPSTREAM_REPO is not None:
-    if os.path.exists(".git"):
-        subprocess.run(
+    if opath.exists(".git"):
+        update = srun(
             [
                 "rm -rf .git"
             ], shell=True
         )
 
-    process = subprocess.run(
+    update = srun(
         [
             f"git init -q \
             && git config --global user.email ryuzakinear108@gmail.com \
@@ -60,7 +60,7 @@ if UPSTREAM_REPO is not None:
         ], shell=True
     )
 
-    if process.returncode == 0:
+    if update.returncode == 0:
         LOGGER.info("Successfully updated with latest commit from UPSTREAM_REPO!")
     else:
         LOGGER.error(
