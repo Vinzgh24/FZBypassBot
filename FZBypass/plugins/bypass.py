@@ -196,7 +196,7 @@ async def inline_query(client, query):
                     [
                         [
                             InlineKeyboardButton(
-                                "FZ Channel", url="https://t.me/FXTorrentz"
+                                "Owner", url="https://t.me/nonplayablcharacter"
                             ),
                             InlineKeyboardButton(
                                 "Try Bypass", switch_inline_query_current_chat="!bp "
