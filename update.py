@@ -61,10 +61,10 @@ if UPSTREAM_REPO is not None:
     )
 
     if update.returncode == 0:
-        LOGGER.info("Successfully updated with latest commit from UPSTREAM_REPO!")
+        log_info("Successfully updated with latest commit from UPSTREAM_REPO!")
     else:
-        LOGGER.error(
+        log_info(
             "Something wrong while updating! Check UPSTREAM_REPO if valid or not!")
 
 else:
-    LOGGER.warning("UPSTREAM_REPO is not found!")
+    log_info.warning("UPSTREAM_REPO is not found!")
