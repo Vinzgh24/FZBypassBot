@@ -20,25 +20,7 @@ basicConfig(
     ],
 )
 load_dotenv("config.env", override=True)
-
-if not os.path.exists("config.env"):
-    CONFIG_FILE_URL = os.environ.get("CONFIG_FILE_URL", "")
-    if len(CONFIG_FILE_URL) != 0:
-        LOGGER.info("CONFIG_FILE_URL is found! Downloading CONFIG_FILE_URL...")
-        r = requests.get(
-            CONFIG_FILE_URL
-        )
-        
-        if not r.ok:
-            LOGGER.error(f"Failed to download config.env! ERROR: [{r.status_code}] {r.text}")
-    
-        with open("config.env", "wb+") as file:
-            file.write(r.content)
-    else:
-        LOGGER.warning("CONFIG_FILE_URL is not found! Using local config.env instead...")
-            
-load_dotenv("config.env", override=True)
-
+       
 BOT_TOKEN = os.environ.get("BOT_TOKEN", "")
 if len(BOT_TOKEN) == 0:
     LOGGER.error("BOT_TOKEN is not found!")
