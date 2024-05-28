@@ -1,4 +1,5 @@
 from re import findall
+from bs4 import BeautifulSoup
 from requests import Session
 
 
