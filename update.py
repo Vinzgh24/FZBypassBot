@@ -1,4 +1,4 @@
-from os import path as opath, getenv
+from os import path as opath, getenv, environ
 from logging import (
     StreamHandler,
     INFO,
@@ -8,7 +8,7 @@ from logging import (
 )
 from logging.handlers import RotatingFileHandler
 from subprocess import run as srun
-from dotenv import load_dotenv
+from dotenv import load_dotenv, dotenv_values
 
 basicConfig(
     level=INFO,
