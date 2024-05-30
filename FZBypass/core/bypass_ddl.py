@@ -1,3 +1,4 @@
+import logging
 from requests import post as rpost ,get as rget
 from re import findall, compile
 from time import sleep, time
@@ -13,6 +14,8 @@ from aiohttp import ClientSession
 from FZBypass import Config
 from FZBypass.core.exceptions import DDLException
 from FZBypass.core.recaptcha import recaptchaV3
+
+logging.basicConfig(level=logging.DEBUG)
 
 async def get_readable_time(seconds):
     minutes, seconds = divmod(seconds, 60)
@@ -163,35 +166,45 @@ async def ouo(url: str):
     p = urlparse(tempurl)
     id = tempurl.split("/")[-1]
     client = cSession(
-        headers={
+        headers = {
             "authority": "ouo.press",
             "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
             "accept-language": "en-GB,en-US;q=0.9,en;q=0.8",
             "cache-control": "max-age=0",
-            "referer": "http://www.google.com/ig/adde?moduleurl=",
+            "referer": "http://www.google.com/ig/adde?",
             "upgrade-insecure-requests": "1",
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
         }
     )
     res = client.get(tempurl, impersonate="chrome110")
+    logging.debug(f"Status Code: {res.status_code}")
+    logging.debug(f"Response Content: {res.content[:500]}")
     next_url = f"{p.scheme}://{p.hostname}/go/{id}"
 
     for _ in range(2):
-        if res.headers.get("Location"):
-            break
-        bs4 = BeautifulSoup(res.content, "lxml")
-        inputs = bs4.form.findAll("input", {"name": compile(r"token$")})
-        data = {inp.get("name"): inp.get("value") for inp in inputs}
-        data["x-token"] = await recaptchaV3()
-        res = client.post(
-            next_url,
-            data=data,
-            headers={"content-type": "application/x-www-form-urlencoded"},
-            allow_redirects=False,
-            impersonate="chrome110",
-        )
-        next_url = f"{p.scheme}://{p.hostname}/xreallcygo/{id}"
+    if res.headers.get("Location"):
+        break
+    bs4 = BeautifulSoup(res.content, "lxml")
+    logging.debug(f"BeautifulSoup Content: {res.content[:500]}")  # Log content being parsed
+    logging.debug(f"BeautifulSoup: {bs4}")
+    
+    if bs4.form is None:
+        logging.error("No form found in the HTML content")
+        return None  # or handle the error appropriately
+    
+    inputs = bs4.form.findAll("input", {"name": compile(r"token$")})
+    data = {inp.get("name"): inp.get("value") for inp in inputs}
+    data["x-token"] = await recaptchaV3()
+    res = client.post(
+        next_url,
+        data=data,
+        headers={"content-type": "application/x-www-form-urlencoded"},
+        allow_redirects=False,
+        impersonate="chrome110",
+    )
+    next_url = f"{p.scheme}://{p.hostname}/xreallcygo/{id}"
 
-    return res.headers.get("Location")
+return res.headers.get("Location")
 
 
 async def mdisk(url: str) -> str:
