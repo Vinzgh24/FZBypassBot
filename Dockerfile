@@ -9,4 +9,6 @@ RUN pip3 install -r requirements.txt
 
 COPY . .
 
+EXPOSE 8181
+
 CMD ["bash","start.sh"]
