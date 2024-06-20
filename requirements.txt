@@ -5,10 +5,9 @@ cloudscraper
 curl_cffi
 lxml
 httpx
-flask
 python-dotenv
 pyrofork
 requests
-tgcrypto
+TgCrypto-pyrofork
 urllib3==1.26
 uvloop
